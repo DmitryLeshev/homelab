@@ -14,6 +14,7 @@ CLUSTER_KUSTOMIZE_PATHS := \
 	$(CLUSTER_DIR)/infrastructure/metallb \
 	$(CLUSTER_DIR)/infrastructure/traefik \
 	$(CLUSTER_DIR)/infrastructure/cert-manager \
+	$(CLUSTER_DIR)/infrastructure/cert-manager-config \
 	$(CLUSTER_DIR)/apps/whoami \
 	$(CLUSTER_DIR)/apps/app-test-secret
 
