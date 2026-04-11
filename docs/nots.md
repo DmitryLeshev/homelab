@@ -55,3 +55,6 @@ flux bootstrap github \
   --branch=main \
   --path=clusters/prod \
   --personal
+
+curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/user | head
+curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/DmitryLeshev/homelab | head

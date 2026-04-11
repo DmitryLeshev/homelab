@@ -157,3 +157,28 @@ kubectl -n kube-system get svc,endpoints kube-dns
 ```bash
 kubectl -n kube-system exec ds/cilium -- cilium status
 ```
+
+## 11. Восстановление после аварии (3+3 команды)
+
+Если после перезапуска нод/сети часть ресурсов в `NotReady`, выполни:
+
+### 11.1 Три команды reconcile
+```bash
+flux reconcile source git flux-system -n flux-system
+flux reconcile kustomization infra-cilium -n flux-system --with-source
+flux reconcile kustomization flux-system -n flux-system --with-source
+```
+
+### 11.2 Три команды проверки
+```bash
+flux get sources git -A
+flux get kustomizations -A
+flux get helmreleases -A
+```
+
+### 11.3 Если застрял `infra-cert-manager`
+```bash
+kubectl -n flux-system get secret sops-age
+flux reconcile kustomization infra-cert-manager -n flux-system --with-source
+flux reconcile kustomization infra-cert-manager-config -n flux-system --with-source
+```

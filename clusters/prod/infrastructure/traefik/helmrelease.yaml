@@ -17,7 +17,7 @@ spec:
     service:
       type: LoadBalancer
       spec:
-        loadBalancerIP: 10.10.20.240
+        loadBalancerIP: 10.10.30.240
     ports:
       web:
         port: 80
