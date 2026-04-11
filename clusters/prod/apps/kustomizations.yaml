@@ -1,0 +1,28 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps-whoami
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./clusters/prod/apps/whoami
+  prune: true
+  dependsOn:
+    - name: infra-traefik
+    - name: infra-cert-manager
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-test-secret
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./clusters/prod/apps/app-test-secret
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

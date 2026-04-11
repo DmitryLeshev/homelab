@@ -1,0 +1,40 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-metallb
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./clusters/prod/infrastructure/metallb
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-traefik
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./clusters/prod/infrastructure/traefik
+  prune: true
+  dependsOn:
+    - name: infra-metallb
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-cert-manager
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./clusters/prod/infrastructure/cert-manager
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

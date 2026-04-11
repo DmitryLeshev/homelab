@@ -1,0 +1,13 @@
+services:
+  terraform:
+    image: hashicorp/terraform:latest #Официальный образ terraform
+    volumes:
+      - .:/terraform # маппим тома. Точка показывает, что установка будет в директорию terraform, в который мы с вами сейчас находимся
+    working_dir: /terraform # Описываем рабочую директорию. Она должна совпадать с той, что задана строчкой выше. В противном случае terraform обидится и не будет работать
+    network_mode: host # обязательно указываем тип сети как хост. Это нужно для того, что terraform мог взаимодействовать с proxmox и нам не нужно будет делать дополнительные настройки сети, которые понимают не только лишь все
+
+  kubeconform:
+    image: ghcr.io/yannh/kubeconform:latest
+    volumes:
+      - .:/workdir
+    working_dir: /workdir

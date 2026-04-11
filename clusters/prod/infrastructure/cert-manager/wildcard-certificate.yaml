@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-24lesh-ru
+  namespace: traefik
+spec:
+  secretName: wildcard-24lesh-ru-tls
+  issuerRef:
+    name: letsencrypt-dns
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.24lesh.ru"
+    - "24lesh.ru"
