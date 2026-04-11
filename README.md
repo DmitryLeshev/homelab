@@ -1,45 +1,88 @@
-# Homelab Infra v2
+# Homelab Infrastructure
 
-Этот каталог запускает Terraform через Docker Compose и Makefile.
+Репозиторий для управления homelab-инфраструктурой:
+- Terraform (Proxmox VM provisioning)
+- Kubernetes GitOps (Flux + Kustomize + HelmRelease)
+- Секреты через SOPS/age
 
-## Быстрый старт
+## Repository Layout
 
-1. Перейдите в каталог v2.
-2. Проверьте значения в terraform/proxmox/terraform.tfvars.
-3. Выполните безопасный прогон с форматированием и валидацией:
+- `terraform/proxmox` — Terraform стек для Proxmox
+- `clusters/prod` — GitOps-манифесты кластера `prod`
+- `docs` — инженерная документация (architecture/planning/runbooks/incidents/reference)
+- `Makefile` — единая точка запуска Terraform и проверок манифестов
+
+## Prerequisites
+
+- Docker + Docker Compose
+- `kubectl`
+- доступ к кластеру (kubeconfig)
+- для SOPS workflow: `sops`, `age`
+
+## Quick Start (Terraform)
+
+Проверьте значения в `terraform/proxmox/terraform.tfvars`, затем выполните:
 
 ```bash
 make plan-auto-fix
 ```
 
-## Основные команды
+`plan-auto-fix` делает:
+1. `terraform init`
+2. `terraform fmt -recursive`
+3. `terraform validate`
+4. `terraform plan -var-file=terraform.tfvars`
+
+## Common Targets
 
 ```bash
 make init
 make plan
 make plan-auto-fix
 make apply
+make apply-auto
 make destroy
+make destroy-auto
+make validate
+make fmt
+make fmt-check
+make output
+make state-list
 ```
 
-## Что делает plan-auto-fix
-
-Цель выполняет шаги по порядку:
-
-1. terraform init
-2. terraform fmt -recursive
-3. terraform validate
-4. terraform plan -var-file=terraform.tfvars
-
-## Переопределяемые параметры
-
-По умолчанию в Makefile:
-
-- TF_DIR=terraform/proxmox
-- TF_VARS_FILE=terraform.tfvars
-
-Пример запуска с переопределением каталога:
+## Kubernetes Manifest Validation
 
 ```bash
-make plan TF_DIR=terraform/proxmox
+make validate-clusters
+make validate-clusters-server
+make validate-clusters-flux
 ```
+
+- `validate-clusters` — `kubectl kustomize` для ключевых путей `clusters/prod`
+- `validate-clusters-server` — `kubectl apply --dry-run=server`
+- `validate-clusters-flux` — `kubeconform` по собранным манифестам
+
+## Makefile Overrides
+
+Параметры по умолчанию:
+- `TF_DIR=terraform/proxmox`
+- `TF_VARS_FILE=terraform.tfvars`
+- `CLUSTER_DIR=clusters/prod`
+
+Пример:
+
+```bash
+make plan TF_DIR=terraform/proxmox TF_VARS_FILE=terraform.tfvars
+```
+
+## Documentation Entry Point
+
+Начинайте с:
+
+- `docs/1.main.md`
+
+Ключевые runbooks:
+- `docs/runbooks/install-k3s-with-cilium.md`
+- `docs/runbooks/bootstrap-flux.md`
+- `docs/runbooks/recover-flux-after-network-incident.md`
+
