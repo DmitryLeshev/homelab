@@ -14,6 +14,6 @@ spec:
         name: cilium
         namespace: flux-system
   values:
-    kubeProxyReplacement: false
+    kubeProxyReplacement: true
     ipam:
       mode: kubernetes

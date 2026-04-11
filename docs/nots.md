@@ -1,3 +1,18 @@
+echo 'export KUBECONFIG=/etc/rancher/k3s/k3s.yaml' >> ~/.bashrc
+source ~/.bashrc
+
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+CLI_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+
+cilium install \
+  --set kubeProxyReplacement=true \
+  --set k8sServiceHost=10.10.30.14 \
+  --set k8sServicePort=6443
 
 2) Я запустил на vm эти команды
 ```
@@ -31,4 +46,12 @@ cat /var/lib/rancher/k3s/server/token
 
 curl -sfL https://get.k3s.io | sudo sh -s - agent \
   --server "https://10.10.30.14:6443" \
-  --token "K10873a928f52e4c02b59d5dd159990133e5efd6262c637d5f2470552bf4455eed7::server:f737f392e6ca466afaef9ed92348268a"
+  --token "K10ba06b3230feb1d450f183be6ad45cd9e73c4e1cd305d21e4d42a6adb73041707::server:7170855e87cbd6bc462cdc6709ecf0ae"
+
+export GITHUB_TOKEN=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
+flux bootstrap github \
+  --owner=DmitryLeshev \
+  --repository=homelab \
+  --branch=main \
+  --path=clusters/prod \
+  --personal
