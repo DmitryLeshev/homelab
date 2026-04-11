@@ -48,7 +48,7 @@ curl -sfL https://get.k3s.io | sudo sh -s - agent \
   --server "https://10.10.30.14:6443" \
   --token "K10ba06b3230feb1d450f183be6ad45cd9e73c4e1cd305d21e4d42a6adb73041707::server:7170855e87cbd6bc462cdc6709ecf0ae"
 
-export GITHUB_TOKEN=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
+export GITHUB_TOKEN=<token>
 flux bootstrap github \
   --owner=DmitryLeshev \
   --repository=homelab \
