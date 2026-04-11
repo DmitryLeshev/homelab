@@ -10,7 +10,7 @@ CLUSTER_DIR ?= clusters/prod
 TF := $(DOCKER) compose -f $(COMPOSE_FILE) run --rm $(TF_SERVICE) -chdir=$(TF_DIR)
 KC := $(DOCKER) compose -f $(COMPOSE_FILE) run --rm -T kubeconform
 CLUSTER_KUSTOMIZE_PATHS := \
-	$(CLUSTER_DIR)/flux-system \
+	$(CLUSTER_DIR) \
 	$(CLUSTER_DIR)/infrastructure/metallb \
 	$(CLUSTER_DIR)/infrastructure/traefik \
 	$(CLUSTER_DIR)/infrastructure/cert-manager \
