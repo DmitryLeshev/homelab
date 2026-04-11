@@ -12,6 +12,7 @@ KC := $(DOCKER) compose -f $(COMPOSE_FILE) run --rm -T kubeconform
 CLUSTER_KUSTOMIZE_PATHS := \
 	$(CLUSTER_DIR) \
 	$(CLUSTER_DIR)/infrastructure/metallb \
+	$(CLUSTER_DIR)/infrastructure/metallb-config \
 	$(CLUSTER_DIR)/infrastructure/traefik \
 	$(CLUSTER_DIR)/infrastructure/cert-manager \
 	$(CLUSTER_DIR)/infrastructure/cert-manager-config \
